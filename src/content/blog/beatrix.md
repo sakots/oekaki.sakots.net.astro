@@ -1,7 +1,7 @@
 ---
 # src/content/blog/my-first-post.md
 title: 'ベアトリクス'
-pubDate: 2026-06-19
+pubDate: 2026-06-09
 description: 'FF9'
 tags: ["ベアトリクス", "FF9"]
 url: beatrix

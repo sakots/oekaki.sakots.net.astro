@@ -1,7 +1,7 @@
 ---
 # src/content/blog/my-first-post.md
 title: 'デエビゴちゃん'
-pubDate: 2026-06-19
+pubDate: 2026-06-09
 description: '名前決定？'
 tags: ["オリジナル","デエビゴちゃん"]
 url: deebigo

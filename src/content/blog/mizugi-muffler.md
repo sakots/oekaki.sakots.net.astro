@@ -1,7 +1,7 @@
 ---
 # src/content/blog/my-first-post.md
 title: '水着マフラーちゃん'
-pubDate: 2026-06-19
+pubDate: 2026-06-09
 description: '冬は水着マフラーちゃんの季節'
 tags: ["オリジナル","水着マフラーちゃん"]
 url: mizugi-muffler
