@@ -46,6 +46,10 @@ const galleryImages: GalleryImage[] = post.data.imageDir
   : [];
 ---
 <BaseLayout title={post.data.title}>
+  <nav class="post-nav" aria-label="記事ナビゲーション">
+    <a href="/">トップページへ戻る</a>
+  </nav>
+
   <article>
     <h1>{post.data.title}</h1>
     <p>公開日: {post.data.pubDate.toLocaleDateString()}</p>
@@ -56,4 +60,14 @@ const galleryImages: GalleryImage[] = post.data.imageDir
     <Content />
     <ImageGallery images={galleryImages} />
   </article>
+
+  <nav class="post-nav" aria-label="記事ナビゲーション">
+    <a href="/">トップページへ戻る</a>
+  </nav>
 </BaseLayout>
+
+<style>
+  .post-nav {
+    margin: 1.5rem 0;
+  }
+</style>
