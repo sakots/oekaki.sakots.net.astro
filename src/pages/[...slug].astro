@@ -53,7 +53,6 @@ const galleryImages: GalleryImage[] = post.data.imageDir
   </nav>
 
   <article>
-    <h1>{post.data.title}</h1>
     <p>公開日: {post.data.pubDate.toLocaleDateString()}</p>
     {post.data.tags && (
       <p>タグ: {post.data.tags.join(', ')}</p>
