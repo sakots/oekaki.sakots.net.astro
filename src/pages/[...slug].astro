@@ -6,6 +6,8 @@ import ImageGallery from '../components/ImageGallery.astro';
 import BaseLayout from '../layouts/BaseLayout.astro'; // レイアウトへのパスが変わることに注意
 import { getRelativeRoot } from '../utils/url';
 
+const IMAGES_PER_PAGE = 50;
+
 type BlogPost = CollectionEntry<'blog'>;
 type GalleryImage = {
   src: ImageMetadata;
@@ -14,40 +16,76 @@ type GalleryImage = {
 
 interface Props {
   post: BlogPost;
+  currentPage: number;
+  totalPages: number;
+  totalImages: number;
 }
-
-export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-
-  return posts.map((post: BlogPost) => {
-    const slugPath = post.data.url ?? post.id.replace(/\.md$/, '');
-
-    return {
-      params: { slug: slugPath },
-      props: { post },
-    };
-  });
-}
-
-const { post } = Astro.props;
-const { Content } = await render(post);
-const rootUrl = getRelativeRoot(Astro.url.pathname);
 
 const imageModules = import.meta.glob<{ default: ImageMetadata }>('../imgs/**/*.{png,jpg,jpeg,webp,gif}', {
   eager: true,
 });
 
-const galleryImages: GalleryImage[] = post.data.imageDir
-  ? Object.entries(imageModules)
-      .filter(([path]) => path.includes(`../imgs/${post.data.imageDir}/`))
-      .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
-      .map(([path, image]) => ({
-        src: image.default,
-        alt: `${post.data.title} ${path.split('/').pop()?.replace(/\.[^.]+$/, '') ?? ''}`,
-      }))
-  : [];
+function getSlugPath(post: BlogPost) {
+  return post.data.url ?? post.id.replace(/\.md$/, '');
+}
+
+function getGalleryImages(post: BlogPost): GalleryImage[] {
+  return post.data.imageDir
+    ? Object.entries(imageModules)
+        .filter(([path]) => path.includes(`../imgs/${post.data.imageDir}/`))
+        .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+        .map(([path, image]) => ({
+          src: image.default,
+          alt: `${post.data.title} ${path.split('/').pop()?.replace(/\.[^.]+$/, '') ?? ''}`,
+        }))
+    : [];
+}
+
+function getPageSlug(slugPath: string, page: number) {
+  return page === 1 ? slugPath : `${slugPath}/page/${page}`;
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const imagesPerPage = 50;
+  const staticImageModules = import.meta.glob<{ default: ImageMetadata }>('../imgs/**/*.{png,jpg,jpeg,webp,gif}', {
+    eager: true,
+  });
+
+  return posts.flatMap((post: BlogPost) => {
+    const slugPath = post.data.url ?? post.id.replace(/\.md$/, '');
+    const totalImages = post.data.imageDir
+      ? Object.keys(staticImageModules).filter((path) => path.includes(`../imgs/${post.data.imageDir}/`)).length
+      : 0;
+    const totalPages = Math.max(1, Math.ceil(totalImages / imagesPerPage));
+
+    return Array.from({ length: totalPages }, (_, index) => {
+      const currentPage = index + 1;
+      const pageSlug = currentPage === 1 ? slugPath : `${slugPath}/page/${currentPage}`;
+
+      return {
+        params: { slug: pageSlug },
+        props: { post, currentPage, totalPages, totalImages },
+      };
+    });
+  });
+}
+
+const { post, currentPage, totalPages, totalImages } = Astro.props;
+const { Content } = await render(post);
+const rootUrl = getRelativeRoot(Astro.url.pathname);
+const slugPath = getSlugPath(post);
+const pageStartIndex = (currentPage - 1) * IMAGES_PER_PAGE;
+const pageEndIndex = pageStartIndex + IMAGES_PER_PAGE;
+const allGalleryImages = getGalleryImages(post);
+const galleryImages = allGalleryImages.slice(pageStartIndex, pageEndIndex);
+const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+function getPageUrl(page: number) {
+  return `${rootUrl}${getPageSlug(slugPath, page)}/`;
+}
 ---
-<BaseLayout title={post.data.title}>
+<BaseLayout title={totalPages > 1 ? `${post.data.title} (${currentPage}/${totalPages})` : post.data.title}>
   <nav class="post-nav" aria-label="記事ナビゲーション">
     <a href={rootUrl}>トップページへ戻る</a>
   </nav>
@@ -59,7 +97,62 @@ const galleryImages: GalleryImage[] = post.data.imageDir
     )}
     <hr />
     <Content />
+    {totalPages > 1 && (
+      <p class="image-count">
+        画像 {pageStartIndex + 1}-{Math.min(pageEndIndex, totalImages)} / {totalImages}
+      </p>
+    )}
+    {totalPages > 1 && (
+      <nav class="pagination" aria-label="画像ページ">
+        {currentPage > 1 ? (
+          <a href={getPageUrl(currentPage - 1)} rel="prev">前へ</a>
+        ) : (
+          <span aria-disabled="true">前へ</span>
+        )}
+        <ol>
+          {pageNumbers.map((page) => (
+            <li>
+              {page === currentPage ? (
+                <span aria-current="page">{page}</span>
+              ) : (
+                <a href={getPageUrl(page)}>{page}</a>
+              )}
+            </li>
+          ))}
+        </ol>
+        {currentPage < totalPages ? (
+          <a href={getPageUrl(currentPage + 1)} rel="next">次へ</a>
+        ) : (
+          <span aria-disabled="true">次へ</span>
+        )}
+      </nav>
+    )}
     <ImageGallery images={galleryImages} />
+    {totalPages > 1 && (
+      <nav class="pagination" aria-label="画像ページ">
+        {currentPage > 1 ? (
+          <a href={getPageUrl(currentPage - 1)} rel="prev">前へ</a>
+        ) : (
+          <span aria-disabled="true">前へ</span>
+        )}
+        <ol>
+          {pageNumbers.map((page) => (
+            <li>
+              {page === currentPage ? (
+                <span aria-current="page">{page}</span>
+              ) : (
+                <a href={getPageUrl(page)}>{page}</a>
+              )}
+            </li>
+          ))}
+        </ol>
+        {currentPage < totalPages ? (
+          <a href={getPageUrl(currentPage + 1)} rel="next">次へ</a>
+        ) : (
+          <span aria-disabled="true">次へ</span>
+        )}
+      </nav>
+    )}
   </article>
 
   <nav class="post-nav" aria-label="記事ナビゲーション">
@@ -70,5 +163,46 @@ const galleryImages: GalleryImage[] = post.data.imageDir
 <style>
   .post-nav {
     margin: 1.5rem 0;
+  }
+
+  .image-count {
+    color: #666;
+    margin: 1.5rem 0 0;
+  }
+
+  .pagination {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .pagination ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pagination a,
+  .pagination span {
+    border: 1px solid #ccc;
+    display: inline-block;
+    min-width: 2.25rem;
+    padding: 0.35rem 0.65rem;
+    text-align: center;
+  }
+
+  .pagination span[aria-current='page'] {
+    background: #222;
+    border-color: #222;
+    color: #fff;
+  }
+
+  .pagination span[aria-disabled='true'] {
+    color: #888;
   }
 </style>
