@@ -1,38 +1,74 @@
 ---
+import type { ImageMetadata } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import { withRelativeRoot } from '../utils/url';
 
 type BlogPost = CollectionEntry<'blog'>;
+type ImageModule = {
+  default: ImageMetadata;
+};
+type PostListItem = {
+  post: BlogPost;
+  thumbnailSrc?: string;
+};
 
 interface Props {
   posts: BlogPost[];
 }
 
 const { posts } = Astro.props;
+const imageModules = import.meta.glob<ImageModule>('../imgs/**/*.{png,jpg,jpeg,webp,gif}', {
+  eager: true,
+});
 
 function getPostUrl(post: BlogPost) {
   const slugPath = post.data.url ?? post.id.replace(/\.md$/, '');
 
   return withRelativeRoot(Astro.url.pathname, `${slugPath}/`);
 }
+
+function getPostThumbnail(post: BlogPost) {
+  if (!post.data.imageDir) {
+    return undefined;
+  }
+
+  const latestImage = Object.entries(imageModules)
+    .filter(([path]) => path.includes(`../imgs/${post.data.imageDir}/`))
+    .sort(([pathA], [pathB]) => pathB.localeCompare(pathA))[0]?.[1].default;
+
+  if (!latestImage) {
+    return undefined;
+  }
+
+  return latestImage.src.startsWith('/')
+    ? withRelativeRoot(Astro.url.pathname, latestImage.src)
+    : latestImage.src;
+}
+
+const postItems: PostListItem[] = posts.map((post) => ({
+  post,
+  thumbnailSrc: getPostThumbnail(post),
+}));
 ---
 <section class="post-list" aria-labelledby="post-list-title">
   <h2 id="post-list-title">記事一覧</h2>
 
-  {posts.length > 0 ? (
+  {postItems.length > 0 ? (
     <ul>
-      {posts.map((post: BlogPost) => (
-        <li>
-          <a href={getPostUrl(post)}>{post.data.title}</a>
-          <time datetime={post.data.pubDate.toISOString()}>
-            {post.data.pubDate.toLocaleDateString('ja-JP')}
-          </time>
-          {post.data.description && <p>{post.data.description}</p>}
-          {post.data.tags && (
-            <ul class="tags" aria-label="タグ">
-              {post.data.tags.map((tag) => <li>{tag}</li>)}
-            </ul>
-          )}
+      {postItems.map(({ post, thumbnailSrc }: PostListItem) => (
+        <li style={thumbnailSrc ? `background-image: url("${thumbnailSrc}");` : undefined}>
+          <div class="post-summary">
+            <a href={getPostUrl(post)}>{post.data.title}</a>
+            <time datetime={post.data.pubDate.toISOString()}>
+              {post.data.pubDate.toLocaleDateString('ja-JP')}
+            </time>
+            {post.data.description && <p>{post.data.description}</p>}
+            {post.data.tags && (
+              <ul class="tags" aria-label="タグ">
+                {post.data.tags.map((tag) => <li>{tag}</li>)}
+              </ul>
+            )}
+          </div>
         </li>
       ))}
     </ul>
@@ -54,8 +90,20 @@ function getPostUrl(post: BlogPost) {
   }
 
   .post-list > ul > li {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 1rem;
+    background-color: #f6f6f6;
+    background-position: center;
+    background-size: cover;
+    min-height: 11rem;
+    padding: 1rem;
+    position: relative;
+  }
+
+  .post-summary {
+    background: rgba(255, 255, 255, 0.84);
+    min-width: 0;
+    padding: 1rem;
+    position: relative;
+    z-index: 1;
   }
 
   .post-list a {
