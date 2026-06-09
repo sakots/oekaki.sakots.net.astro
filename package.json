@@ -16,6 +16,7 @@
     "luminous-lightbox": "^2.4.0"
   },
   "devDependencies": {
+    "@types/luminous-lightbox": "^2.4.0",
     "astro-icon": "^1.1.5"
   }
 }

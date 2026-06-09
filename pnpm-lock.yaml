@@ -15,6 +15,9 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0
     devDependencies:
+      '@types/luminous-lightbox':
+        specifier: ^2.4.0
+        version: 2.4.0
       astro-icon:
         specifier: ^1.1.5
         version: 1.1.5
@@ -590,6 +593,9 @@ packages:
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
+
+  '@types/luminous-lightbox@2.4.0':
+    resolution: {integrity: sha512-DGpzhLZiufcwTmN9puDDRtQlJPrZMY/RFCzkXgG91KLEzW5Nmmst6tIWfCz8PlZ2KKPp85Wl22N5luRlvZFPmQ==}
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
@@ -2049,6 +2055,8 @@ snapshots:
   '@types/hast@3.0.4':
     dependencies:
       '@types/unist': 3.0.3
+
+  '@types/luminous-lightbox@2.4.0': {}
 
   '@types/mdast@4.0.4':
     dependencies:
