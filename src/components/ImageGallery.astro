@@ -1,6 +1,5 @@
 ---
 import type { ImageMetadata } from 'astro';
-import 'luminous-lightbox/dist/luminous-basic.css';
 import { withRelativeRoot } from '../utils/url';
 
 interface GalleryImage {
@@ -13,32 +12,37 @@ interface Props {
 }
 
 const { images } = Astro.props;
+const luminousCssUrl = withRelativeRoot(Astro.url.pathname, 'vendor/luminous/luminous-basic.min.css');
+const luminousScriptUrl = withRelativeRoot(Astro.url.pathname, 'vendor/luminous/luminous.min.js');
 
 function getImageSrc(src: string) {
   return src.startsWith('/') ? withRelativeRoot(Astro.url.pathname, src) : src;
 }
 ---
 {images.length > 0 && (
-  <section class="image-gallery" aria-label="画像ギャラリー">
-    {images.map((image) => (
-      <figure>
-        <a href={getImageSrc(image.src.src)} class="luminous-gallery-item">
-          <img src={getImageSrc(image.src.src)} alt={image.alt} loading="lazy" />
-        </a>
-      </figure>
-    ))}
-  </section>
+  <>
+    <link rel="stylesheet" href={luminousCssUrl} />
+    <section class="image-gallery" aria-label="画像ギャラリー">
+      {images.map((image) => (
+        <figure>
+          <a href={getImageSrc(image.src.src)} class="luminous-gallery-item">
+            <img src={getImageSrc(image.src.src)} alt={image.alt} loading="lazy" />
+          </a>
+        </figure>
+      ))}
+    </section>
+    <script is:inline src={luminousScriptUrl}></script>
+    <script is:inline>
+      (() => {
+        const galleryItems = document.querySelectorAll('.luminous-gallery-item');
+
+        if (galleryItems.length > 0 && window.LuminousGallery) {
+          new window.LuminousGallery(galleryItems);
+        }
+      })();
+    </script>
+  </>
 )}
-
-<script>
-  import { LuminousGallery } from 'luminous-lightbox';
-
-  const galleryItems = document.querySelectorAll<HTMLAnchorElement>('.luminous-gallery-item');
-
-  if (galleryItems.length > 0) {
-    new LuminousGallery(galleryItems);
-  }
-</script>
 
 <style>
   .image-gallery {
