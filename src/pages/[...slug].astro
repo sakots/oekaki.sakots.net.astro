@@ -1,9 +1,15 @@
 ---
 // src/pages/[...slug].astro (新規作成、src/pages/blog/[id].astro は削除)
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import ImageGallery from '../components/ImageGallery.astro';
 import BaseLayout from '../layouts/BaseLayout.astro'; // レイアウトへのパスが変わることに注意
 
 type BlogPost = CollectionEntry<'blog'>;
+type GalleryImage = {
+  src: ImageMetadata;
+  alt: string;
+};
 
 interface Props {
   post: BlogPost;
@@ -24,6 +30,20 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+const imageModules = import.meta.glob<{ default: ImageMetadata }>('../imgs/**/*.{png,jpg,jpeg,webp,gif}', {
+  eager: true,
+});
+
+const galleryImages: GalleryImage[] = post.data.imageDir
+  ? Object.entries(imageModules)
+      .filter(([path]) => path.includes(`../imgs/${post.data.imageDir}/`))
+      .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+      .map(([path, image]) => ({
+        src: image.default,
+        alt: `${post.data.title} ${path.split('/').pop()?.replace(/\.[^.]+$/, '') ?? ''}`,
+      }))
+  : [];
 ---
 <BaseLayout title={post.data.title}>
   <article>
@@ -34,5 +54,6 @@ const { Content } = await render(post);
     )}
     <hr />
     <Content />
+    <ImageGallery images={galleryImages} />
   </article>
 </BaseLayout>

@@ -1,0 +1,42 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface GalleryImage {
+  src: ImageMetadata;
+  alt: string;
+}
+
+interface Props {
+  images: GalleryImage[];
+}
+
+const { images } = Astro.props;
+---
+{images.length > 0 && (
+  <section class="image-gallery" aria-label="画像ギャラリー">
+    {images.map((image) => (
+      <figure>
+        <img src={image.src.src} alt={image.alt} loading="lazy" />
+      </figure>
+    ))}
+  </section>
+)}
+
+<style>
+  .image-gallery {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin-top: 2rem;
+  }
+
+  .image-gallery figure {
+    margin: 0;
+  }
+
+  .image-gallery img {
+    display: block;
+    height: auto;
+    width: 100%;
+  }
+</style>
