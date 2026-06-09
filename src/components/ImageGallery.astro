@@ -1,5 +1,6 @@
 ---
 import type { ImageMetadata } from 'astro';
+import 'luminous-lightbox/dist/luminous-basic.css';
 import { withRelativeRoot } from '../utils/url';
 
 interface GalleryImage {
@@ -21,11 +22,23 @@ function getImageSrc(src: string) {
   <section class="image-gallery" aria-label="画像ギャラリー">
     {images.map((image) => (
       <figure>
-        <img src={getImageSrc(image.src.src)} alt={image.alt} loading="lazy" />
+        <a href={getImageSrc(image.src.src)} class="luminous-gallery-item">
+          <img src={getImageSrc(image.src.src)} alt={image.alt} loading="lazy" />
+        </a>
       </figure>
     ))}
   </section>
 )}
+
+<script>
+  import { LuminousGallery } from 'luminous-lightbox';
+
+  const galleryItems = document.querySelectorAll<HTMLAnchorElement>('.luminous-gallery-item');
+
+  if (galleryItems.length > 0) {
+    new LuminousGallery(galleryItems);
+  }
+</script>
 
 <style>
   .image-gallery {
@@ -37,6 +50,10 @@ function getImageSrc(src: string) {
 
   .image-gallery figure {
     margin: 0;
+  }
+
+  .image-gallery a {
+    display: block;
   }
 
   .image-gallery img {
