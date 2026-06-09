@@ -8,6 +8,13 @@ type BlogPost = CollectionEntry<'blog'>;
 const posts = await getCollection('blog');
 posts.sort((a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
+<style>
+  body {
+    max-width: 720px;
+    margin: auto;
+  }
+</style>
+
 <BaseLayout title="さこちゃねる">
   <p>なんと令和にさこちゃねるが復活！</p>
   <BlogPostList posts={posts} />
