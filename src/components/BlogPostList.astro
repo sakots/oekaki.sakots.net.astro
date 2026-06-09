@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+type BlogPost = CollectionEntry<'blog'>;
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+
+function getPostUrl(post: BlogPost) {
+  const slugPath = post.data.url ?? post.id.replace(/\.md$/, '');
+
+  return `/${slugPath}/`;
+}
+---
+<section class="post-list" aria-labelledby="post-list-title">
+  <h2 id="post-list-title">記事一覧</h2>
+
+  {posts.length > 0 ? (
+    <ul>
+      {posts.map((post: BlogPost) => (
+        <li>
+          <a href={getPostUrl(post)}>{post.data.title}</a>
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString('ja-JP')}
+          </time>
+          {post.data.description && <p>{post.data.description}</p>}
+          {post.data.tags && (
+            <ul class="tags" aria-label="タグ">
+              {post.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>記事はまだありません。</p>
+  )}
+</section>
+
+<style>
+  .post-list {
+    max-width: 44rem;
+  }
+
+  .post-list > ul {
+    display: grid;
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-list > ul > li {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
+  }
+
+  .post-list a {
+    display: inline-block;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .post-list time {
+    display: block;
+    color: #666;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .tags li {
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    padding: 0.125rem 0.5rem;
+  }
+</style>
