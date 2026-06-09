@@ -3,7 +3,7 @@
 title: 'デエビゴちゃん'
 pubDate: 2026-06-19
 description: '名前決定？'
-tags: ["デエビゴちゃん"]
+tags: ["オリジナル","デエビゴちゃん"]
 url: deebigo
 imageDir: deebigo
 ---

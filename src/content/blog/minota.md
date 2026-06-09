@@ -3,7 +3,7 @@
 title: '簑田さんとその仲間'
 pubDate: 2026-06-19
 description: 'でっかいツノあるとTシャツ着るの大変そう'
-tags: ["蓑田さん"]
+tags: ["オリジナル","蓑田さん","サタン様"]
 url: minota
 imageDir: minota
 ---
