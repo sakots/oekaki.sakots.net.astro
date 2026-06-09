@@ -1,0 +1,9 @@
+---
+# src/content/blog/my-first-post.md
+title: 'デエビゴちゃん'
+pubDate: 2026-06-19
+description: '名前決定？'
+tags: ["Astro", "Blog", "デエビゴちゃん"]
+url: deebigo
+imageDir: deebigo
+---
