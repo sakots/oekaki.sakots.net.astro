@@ -11,6 +11,9 @@ importers:
       astro:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@25.9.2)(rollup@4.61.1)
+      luminous-lightbox:
+        specifier: ^2.4.0
+        version: 2.4.0
     devDependencies:
       astro-icon:
         specifier: ^1.1.5
@@ -985,6 +988,9 @@ packages:
   lru-cache@11.5.1:
     resolution: {integrity: sha512-RPimw/7aMdv2oqRrxKwvZXcPfwBrn/JZ2xYcY9Hus/6LaS3VOAKVWKWgNLCFSiOm1ESXinjsDlidVU7JlnCN2A==}
     engines: {node: 20 || >=22}
+
+  luminous-lightbox@2.4.0:
+    resolution: {integrity: sha512-qu1IE2/+sTyAzUgEGffHPnBNenJ1CDDieSDy6yLgmJUsMVoTLCbTeDJuQvje4hpl+M3xZvq87TIP8hu3BsgaEQ==}
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
@@ -2583,6 +2589,8 @@ snapshots:
   longest-streak@3.1.0: {}
 
   lru-cache@11.5.1: {}
+
+  luminous-lightbox@2.4.0: {}
 
   magic-string@0.30.21:
     dependencies:

@@ -12,7 +12,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.4.4"
+    "astro": "^6.4.4",
+    "luminous-lightbox": "^2.4.0"
   },
   "devDependencies": {
     "astro-icon": "^1.1.5"
