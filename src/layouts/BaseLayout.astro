@@ -14,6 +14,10 @@ const { title, author, frontmatter } = Astro.props;
 const pageTitle = title ?? frontmatter?.title ?? 'さこちゃねる';
 const pageAuthor = author ?? frontmatter?.author ?? 'さこちゃねる';
 const faviconUrl = withRelativeRoot(Astro.url.pathname, 'favicon.ico');
+
+const canonicalURL = new URL(Astro.url.pathname, 'https://oekaki.sakots.net');
+const ogpImageURL = new URL('/ogp.png', canonicalURL);
+
 ---
 <html lang="ja">
   <head>
@@ -22,6 +26,16 @@ const faviconUrl = withRelativeRoot(Astro.url.pathname, 'favicon.ico');
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
+    <meta property="og:image" content={ogpImageURL} />
+    <meta property="og:title" content="さこちゃねる（令和最新版）" />
+    <meta property="og:description" content="なんとさこちゃねるが令和に復活" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogpImageURL} />
+    <meta property="og:site_name" content="さこちゃねる" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="さこちゃねる（令和最新版）" />
+    <meta name="twitter:description" content="なんとさこちゃねるが令和に復活" />
   </head>
   <body>
     <header>
