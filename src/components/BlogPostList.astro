@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { withRelativeRoot } from '../utils/url';
 
 type BlogPost = CollectionEntry<'blog'>;
 
@@ -12,7 +13,7 @@ const { posts } = Astro.props;
 function getPostUrl(post: BlogPost) {
   const slugPath = post.data.url ?? post.id.replace(/\.md$/, '');
 
-  return `/${slugPath}/`;
+  return withRelativeRoot(Astro.url.pathname, `${slugPath}/`);
 }
 ---
 <section class="post-list" aria-labelledby="post-list-title">

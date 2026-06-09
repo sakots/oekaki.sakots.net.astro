@@ -1,4 +1,6 @@
 ---
+import { withRelativeRoot } from '../utils/url';
+
 interface Props {
   title?: string;
   author?: string;
@@ -11,11 +13,12 @@ interface Props {
 const { title, author, frontmatter } = Astro.props;
 const pageTitle = title ?? frontmatter?.title ?? 'さこちゃねる';
 const pageAuthor = author ?? frontmatter?.author ?? 'さこちゃねる';
+const faviconUrl = withRelativeRoot(Astro.url.pathname, 'favicon.ico');
 ---
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href={faviconUrl} />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
