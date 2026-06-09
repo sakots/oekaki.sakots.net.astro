@@ -1,0 +1,34 @@
+---
+interface Props {
+  title?: string;
+  author?: string;
+  frontmatter?: {
+    title?: string;
+    author?: string;
+  };
+}
+
+const { title, author, frontmatter } = Astro.props;
+const pageTitle = title ?? frontmatter?.title ?? 'さこちゃねる';
+const pageAuthor = author ?? frontmatter?.author ?? 'さこちゃねる';
+---
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <header>
+      <h1>{pageTitle}</h1>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>&copy; {new Date().getFullYear()} {pageAuthor}. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
