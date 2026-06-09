@@ -3,7 +3,7 @@
 title: 'コベニ'
 pubDate: 2026-06-19
 description: 'コベニちゃん'
-tags: ["Astro", "Blog", "チェンソーマン","コベニ"]
+tags: ["チェンソーマン","コベニ"]
 url: kobeni
 imageDir: kobeni
 ---

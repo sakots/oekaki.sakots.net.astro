@@ -3,7 +3,7 @@
 title: '簑田さんとその仲間'
 pubDate: 2026-06-19
 description: 'でっかいツノあるとTシャツ着るの大変そう'
-tags: ["Astro", "Blog", "蓑田さん"]
+tags: ["蓑田さん"]
 url: minota
 imageDir: minota
 ---

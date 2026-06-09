@@ -3,7 +3,7 @@
 title: 'ウフルちゃん'
 pubDate: 2026-06-19
 description: '誤字により名前が決まったウフルちゃん'
-tags: ["Astro", "Blog", "ウフルちゃん"]
+tags: ["ウフルちゃん"]
 url: wofl
 imageDir: wofl
 ---
