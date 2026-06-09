@@ -44,7 +44,8 @@ function getImageSrc(src: string) {
   .image-gallery {
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 400px));
+    justify-content: start;
     margin-top: 2rem;
   }
 
@@ -59,6 +60,7 @@ function getImageSrc(src: string) {
   .image-gallery img {
     display: block;
     height: auto;
-    width: 100%;
+    max-width: 100%;
+    width: 400px;
   }
 </style>
