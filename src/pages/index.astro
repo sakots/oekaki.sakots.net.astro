@@ -13,9 +13,16 @@ posts.sort((a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDa
     max-width: 720px;
     margin: auto;
   }
+  iframe {
+    border: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
 </style>
 
 <BaseLayout title="さこちゃねる">
   <p>なんと令和にさこちゃねるが復活！</p>
+  <iframe src="https://oekaki.sakots.net/count/count.php" height="40" width="180"></iframe>
   <BlogPostList posts={posts} />
 </BaseLayout>
