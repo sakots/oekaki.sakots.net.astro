@@ -1,7 +1,7 @@
 ---
 # src/content/blog/my-first-post.md
 title: 'お借り'
-pubDate: 2026-07-11
+pubDate: 2026-06-09
 description: '借り物'
 tags: ["二次創作","おかりしました"]
 url: okari
