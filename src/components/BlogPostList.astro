@@ -1,7 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import type { CollectionEntry } from 'astro:content';
-import { compareImagePathsByTimestampDescending } from '../utils/imageSort';
+import { compareImagePathsByTimestampDescending, getLatestImageDate } from '../utils/imageSort';
 import { withRelativeRoot } from '../utils/url';
 
 type BlogPost = CollectionEntry<'blog'>;
@@ -11,6 +11,7 @@ type ImageModule = {
 type PostListItem = {
   post: BlogPost;
   thumbnailSrc?: string;
+  updatedAt?: Date;
 };
 
 interface Props {
@@ -46,9 +47,21 @@ function getPostThumbnail(post: BlogPost) {
     : latestImage.src;
 }
 
+function getPostUpdatedAt(post: BlogPost) {
+  if (!post.data.imageDir) {
+    return undefined;
+  }
+
+  const imagePaths = Object.keys(imageModules)
+    .filter((path) => path.includes(`../imgs/${post.data.imageDir}/`));
+
+  return getLatestImageDate(imagePaths);
+}
+
 const postItems: PostListItem[] = posts.map((post) => ({
   post,
   thumbnailSrc: getPostThumbnail(post),
+  updatedAt: getPostUpdatedAt(post),
 }));
 ---
 <section class="post-list" aria-labelledby="post-list-title">
@@ -56,13 +69,18 @@ const postItems: PostListItem[] = posts.map((post) => ({
 
   {postItems.length > 0 ? (
     <ul>
-      {postItems.map(({ post, thumbnailSrc }: PostListItem) => (
+      {postItems.map(({ post, thumbnailSrc, updatedAt }: PostListItem) => (
         <li style={thumbnailSrc ? `background-image: url("${thumbnailSrc}");` : undefined}>
           <div class="post-summary">
             <a href={getPostUrl(post)}>{post.data.title}</a>
             <time datetime={post.data.pubDate.toISOString()}>
-              {post.data.pubDate.toLocaleDateString('ja-JP')}
+              公開日: {post.data.pubDate.toLocaleDateString('ja-JP')}
             </time>
+            {updatedAt && (
+              <time datetime={updatedAt.toISOString()}>
+                更新日: {updatedAt.toLocaleDateString('ja-JP')}
+              </time>
+            )}
             {post.data.description && <p>{post.data.description}</p>}
             {post.data.tags && (
               <ul class="tags" aria-label="タグ">
