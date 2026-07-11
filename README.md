@@ -8,6 +8,24 @@
 
 ```bash
 pnpm install
+```
+
+`src/content/blog/`内各.mdファイルを編集
+
+```astro
+---
+title: 'ページタイトル'
+pubDate: YYYY-MM-DD
+description: 'ページ概要'
+tags: ["タグ","複数可能"]
+url: pageUrl
+imageDir: imageDir
+---
+```
+
+`src/imgs/imageDir`内に画像を配置する
+
+```bash
 pnpm build
 ```
 
