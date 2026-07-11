@@ -4,6 +4,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 import ImageGallery from '../components/ImageGallery.astro';
 import BaseLayout from '../layouts/BaseLayout.astro'; // レイアウトへのパスが変わることに注意
+import { compareImagePathsByTimestamp } from '../utils/imageSort';
 import { getRelativeRoot } from '../utils/url';
 
 const IMAGES_PER_PAGE = 50;
@@ -33,7 +34,7 @@ function getGalleryImages(post: BlogPost): GalleryImage[] {
   return post.data.imageDir
     ? Object.entries(imageModules)
         .filter(([path]) => path.includes(`../imgs/${post.data.imageDir}/`))
-        .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+        .sort(([pathA], [pathB]) => compareImagePathsByTimestamp(pathA, pathB))
         .map(([path, image]) => ({
           src: image.default,
           alt: `${post.data.title} ${path.split('/').pop()?.replace(/\.[^.]+$/, '') ?? ''}`,

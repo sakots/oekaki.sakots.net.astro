@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import type { CollectionEntry } from 'astro:content';
+import { compareImagePathsByTimestampDescending } from '../utils/imageSort';
 import { withRelativeRoot } from '../utils/url';
 
 type BlogPost = CollectionEntry<'blog'>;
@@ -34,7 +35,7 @@ function getPostThumbnail(post: BlogPost) {
 
   const latestImage = Object.entries(imageModules)
     .filter(([path]) => path.includes(`../imgs/${post.data.imageDir}/`))
-    .sort(([pathA], [pathB]) => pathB.localeCompare(pathA))[0]?.[1].default;
+    .sort(([pathA], [pathB]) => compareImagePathsByTimestampDescending(pathA, pathB))[0]?.[1].default;
 
   if (!latestImage) {
     return undefined;
