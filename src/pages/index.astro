@@ -1,14 +1,11 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BlogPostList from '../components/BlogPostList.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 import Marquee from '../components/Marquee.astro';
 
-type BlogPost = CollectionEntry<'blog'>;
-
 const posts = await getCollection('blog');
-posts.sort((a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 <style>
   body {
