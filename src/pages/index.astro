@@ -2,26 +2,26 @@
 import { getCollection } from 'astro:content';
 import BlogPostList from '../components/BlogPostList.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/gallery.scss';
 
 import Marquee from '../components/Marquee.astro';
 
 const posts = await getCollection('blog');
 ---
-<style>
-  body {
-    max-width: 720px;
-    margin: auto;
-  }
-  iframe {
-    border: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-</style>
 
 <BaseLayout title="さこちゃねる">
-  <Marquee message="なんと令和にさこちゃねるが復活！" duration="15s" />
-  <iframe src="https://oekaki.sakots.net/count/count.php" height="40" width="220"></iframe>
-  <BlogPostList posts={posts} />
+  <div class="home-page">
+    <div class="home-page__announcement">
+      <Marquee message="なんと令和にさこちゃねるが復活！" duration="15s" />
+    </div>
+    <div class="home-page__counter">
+      <iframe
+        src="https://oekaki.sakots.net/count/count.php"
+        title="アクセスカウンター"
+        height="40"
+        width="220"
+      ></iframe>
+    </div>
+    <BlogPostList posts={posts} />
+  </div>
 </BaseLayout>
