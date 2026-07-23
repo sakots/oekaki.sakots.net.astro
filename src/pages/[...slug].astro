@@ -4,6 +4,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 import ImageGallery from '../components/ImageGallery.astro';
 import BaseLayout from '../layouts/BaseLayout.astro'; // レイアウトへのパスが変わることに注意
+import '../styles/gallery.scss';
 import { compareImagePathsByTimestamp, getLatestImageDate } from '../utils/imageSort';
 import { getRelativeRoot } from '../utils/url';
 
@@ -95,16 +96,31 @@ function getPageUrl(page: number) {
     <a href={rootUrl}>トップページへ戻る</a>
   </nav>
 
-  <article>
-    <p>公開日: {post.data.pubDate.toLocaleDateString('ja-JP')}</p>
-    {updatedAt && (
-      <p>更新日: <time datetime={updatedAt.toISOString()}>{updatedAt.toLocaleDateString('ja-JP')}</time></p>
-    )}
-    {post.data.tags && (
-      <p>タグ: {post.data.tags.join(', ')}</p>
-    )}
-    <hr />
-    <Content />
+  <article class="gallery-page">
+    <ul class="gallery-page__meta" aria-label="ギャラリー情報">
+      <li>
+        <span class="gallery-page__label">公開日</span>
+        <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('ja-JP')}</time>
+      </li>
+      {updatedAt && (
+        <li>
+          <span class="gallery-page__label">更新日</span>
+          <time datetime={updatedAt.toISOString()}>{updatedAt.toLocaleDateString('ja-JP')}</time>
+        </li>
+      )}
+      {post.data.tags && post.data.tags.length > 0 && (
+        <li>
+          <span class="gallery-page__label">タグ</span>
+          <ul class="gallery-tags" aria-label="タグ一覧">
+            {post.data.tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+        </li>
+      )}
+    </ul>
+    <div class="gallery-page__description">
+      {post.data.description && <p>{post.data.description}</p>}
+      <Content />
+    </div>
     {totalPages > 1 && (
       <p class="image-count">
         画像 {pageStartIndex + 1}-{Math.min(pageEndIndex, totalImages)} / {totalImages}
@@ -167,50 +183,3 @@ function getPageUrl(page: number) {
     <a href={rootUrl}>トップページへ戻る</a>
   </nav>
 </BaseLayout>
-
-<style>
-  .post-nav {
-    margin: 1.5rem 0;
-  }
-
-  .image-count {
-    color: #666;
-    margin: 1.5rem 0 0;
-  }
-
-  .pagination {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin: 1rem 0;
-  }
-
-  .pagination ol {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .pagination a,
-  .pagination span {
-    border: 1px solid #ccc;
-    display: inline-block;
-    min-width: 2.25rem;
-    padding: 0.35rem 0.65rem;
-    text-align: center;
-  }
-
-  .pagination span[aria-current='page'] {
-    background: #222;
-    border-color: #222;
-    color: #fff;
-  }
-
-  .pagination span[aria-disabled='true'] {
-    color: #888;
-  }
-</style>

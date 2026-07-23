@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@types/luminous-lightbox": "^2.4.0",
-    "astro-icon": "^1.1.5"
+    "astro-icon": "^1.1.5",
+    "sass": "^1.101.3"
   }
 }

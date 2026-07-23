@@ -24,9 +24,19 @@ function getImageSrc(src: string) {
     <link rel="stylesheet" href={luminousCssUrl} />
     <section class="image-gallery" aria-label="画像ギャラリー">
       {images.map((image) => (
-        <figure>
-          <a href={getImageSrc(image.src.src)} class="luminous-gallery-item">
-            <img src={getImageSrc(image.src.src)} alt={image.alt} loading="lazy" />
+        <figure class="image-gallery__item">
+          <a
+            href={getImageSrc(image.src.src)}
+            class="image-gallery__link luminous-gallery-item"
+          >
+            <img
+              src={getImageSrc(image.src.src)}
+              alt={image.alt}
+              width={image.src.width}
+              height={image.src.height}
+              loading="lazy"
+              decoding="async"
+            />
           </a>
         </figure>
       ))}
@@ -43,28 +53,3 @@ function getImageSrc(src: string) {
     </script>
   </>
 )}
-
-<style>
-  .image-gallery {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 400px));
-    justify-content: start;
-    margin-top: 2rem;
-  }
-
-  .image-gallery figure {
-    margin: 0;
-  }
-
-  .image-gallery a {
-    display: block;
-  }
-
-  .image-gallery img {
-    display: block;
-    height: auto;
-    max-width: 100%;
-    width: 400px;
-  }
-</style>

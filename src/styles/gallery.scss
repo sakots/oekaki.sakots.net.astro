@@ -1,0 +1,312 @@
+// ============================================================
+// ギャラリーページ共通カラー・サイズ
+// サイト全体の配色を変える場合は、まずこの変数を調整します。
+// ============================================================
+// 通常の文字色
+$gallery-ink: #342f3b;
+// 日付や補足文など、控えめな文字の色
+$gallery-muted: #756d7c;
+// 現在ページやフォーカス枠に使うメインカラー
+$gallery-accent: #d85b83;
+// リンクやタグ文字に使う濃いアクセントカラー
+$gallery-accent-dark: #a9365c;
+// ギャラリー本文カードの背景色
+$gallery-paper: #fffdf9;
+// カードやボタンの境界線の色
+$gallery-border: #eadde3;
+// ギャラリー本文カードの角丸
+$gallery-radius: 1rem;
+
+// ページネーションのリンクと無効ボタンに共通する見た目
+@mixin interactive-surface {
+  border: 1px solid $gallery-border;
+  border-radius: 0.65rem;
+  color: $gallery-accent-dark;
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+// ページ全体の背景・基本文字・フォント設定
+body {
+  background:
+    radial-gradient(circle at top left, rgb(255 226 235 / 55%), transparent 30rem),
+    #f8f4f2;
+  color: $gallery-ink;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.7;
+  margin: 0;
+}
+
+// ヘッダー・本文・フッター共通の最大幅と左右余白
+body > header,
+body > main,
+body > footer {
+  box-sizing: border-box;
+  margin-inline: auto;
+  max-width: 76rem;
+  width: min(100% - 2rem, 76rem);
+}
+
+// ページ上部のタイトル領域
+body > header {
+  padding-block: clamp(2rem, 6vw, 4.5rem) 1.25rem;
+
+  // ギャラリータイトル
+  h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    margin: 0;
+  }
+}
+
+// ページ下部の著作権表示
+body > footer {
+  color: $gallery-muted;
+  font-size: 0.875rem;
+  padding-block: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+// 日付・説明・画像一覧を囲むギャラリー本文カード
+.gallery-page {
+  background: $gallery-paper;
+  border: 1px solid $gallery-border;
+  border-radius: $gallery-radius;
+  box-shadow: 0 1rem 3rem rgb(84 56 69 / 8%);
+  padding: clamp(1rem, 3vw, 2.5rem);
+
+  // 公開日・更新日・タグを並べる情報欄
+  &__meta {
+    align-items: center;
+    color: $gallery-muted;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.875rem;
+    gap: 0.5rem 1rem;
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0 0 1.25rem;
+    border-bottom: 1px solid $gallery-border;
+
+    // 情報欄内の各項目
+    li {
+      align-items: center;
+      display: flex;
+      gap: 0.35rem;
+    }
+  }
+
+  // 「公開日」「更新日」「タグ」の見出し
+  &__label {
+    color: $gallery-ink;
+    font-weight: 700;
+  }
+
+  // ギャラリーの説明文・Markdown本文
+  &__description {
+    margin-block: 0 2rem;
+
+    // 説明欄先頭の不要な上余白を取り除く
+    > :first-child {
+      margin-top: 0;
+    }
+
+    // 説明欄末尾の不要な下余白を取り除く
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// タグ一覧の横並び・折り返し設定
+.gallery-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  // タグ1個ごとのカプセル表示
+  li {
+    background: #fff0f5;
+    border-radius: 999px;
+    color: $gallery-accent-dark;
+    padding: 0.1rem 0.65rem;
+  }
+}
+
+// ギャラリー上下にある「トップページへ戻る」リンク
+.post-nav {
+  margin-block: 1rem;
+
+  // 戻るリンクの文字色と太さ
+  a {
+    color: $gallery-accent-dark;
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+}
+
+// 複数ページ時に表示する「画像 1-50 / 100」部分
+.image-count {
+  color: $gallery-muted;
+  font-size: 0.875rem;
+  margin: 1.5rem 0 0;
+}
+
+// 「前へ・ページ番号・次へ」のページネーション全体
+.pagination {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1rem 0;
+
+  // ページ番号の横並び・折り返し設定
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // クリックできるリンクとクリックできない表示の共通サイズ
+  a,
+  span {
+    @include interactive-surface;
+    align-items: center;
+    min-height: 2.35rem;
+    min-width: 2.35rem;
+    padding: 0.25rem 0.65rem;
+  }
+
+  // マウスを重ねたページリンク
+  a:hover {
+    background: #fff0f5;
+    border-color: $gallery-accent;
+    color: $gallery-accent-dark;
+    transform: translateY(-1px);
+  }
+
+  // 現在開いているページ番号
+  span[aria-current="page"] {
+    background: $gallery-accent;
+    border-color: $gallery-accent;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  // 先頭・最終ページで無効になる「前へ」「次へ」
+  span[aria-disabled="true"] {
+    background: #f5f1f2;
+    color: #aaa2a7;
+  }
+}
+
+// 画像カードを並べるレスポンシブグリッド
+.image-gallery {
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  margin-top: 1.5rem;
+
+  // 画像1枚を囲むカード
+  &__item {
+    // 透過画像の背景が分かる市松模様
+    background-color: #f8f3f5;
+    background-image:
+      linear-gradient(45deg, #eee5e9 25%, transparent 25%),
+      linear-gradient(-45deg, #eee5e9 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #eee5e9 75%),
+      linear-gradient(-45deg, transparent 75%, #eee5e9 75%);
+    background-position:
+      0 0,
+      0 0.5rem,
+      0.5rem -0.5rem,
+      -0.5rem 0;
+    background-size: 1rem 1rem;
+    border: 1px solid $gallery-border;
+    border-radius: 0.8rem;
+    margin: 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  // ライトボックスを開く画像リンクと、カード内の画像位置
+  &__link {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    min-height: 12rem;
+    padding: 0.65rem;
+
+    // キーボード操作時のフォーカス表示
+    &:focus-visible {
+      outline: 3px solid $gallery-accent;
+      outline-offset: -3px;
+    }
+  }
+
+  // 画像本体の最大サイズと縦横比
+  img {
+    display: block;
+    height: auto;
+    max-height: 32rem;
+    max-width: 100%;
+    transition:
+      filter 180ms ease,
+      transform 180ms ease;
+    width: auto;
+  }
+
+  // マウスを重ねた画像の演出
+  &__link:hover img {
+    filter: saturate(1.06);
+    transform: scale(1.015);
+  }
+}
+
+// 画面幅576px以下のスマートフォン向け調整
+@media (max-width: 36rem) {
+  // 画面端の左右余白を狭くする
+  body > header,
+  body > main,
+  body > footer {
+    width: min(100% - 1rem, 76rem);
+  }
+
+  // 小画面では本文カードの角丸を少し小さくする
+  .gallery-page {
+    border-radius: 0.75rem;
+  }
+
+  // ページネーションを中央揃えにし、ページ番号を別の行へ送る
+  .pagination {
+    justify-content: center;
+
+    ol {
+      justify-content: center;
+      order: 3;
+      width: 100%;
+    }
+  }
+}
+
+// OSで「視差効果を減らす」が有効な場合はアニメーションを停止
+@media (prefers-reduced-motion: reduce) {
+  .pagination a,
+  .image-gallery img {
+    transition: none;
+  }
+}
