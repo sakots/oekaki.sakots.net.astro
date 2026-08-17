@@ -14,13 +14,19 @@ const posts = await getCollection('blog');
     <div class="home-page__announcement">
       <Marquee message="なんと令和にさこちゃねるが復活！" duration="15s" />
     </div>
-    <div class="home-page__counter">
-      <iframe
-        src="https://oekaki.sakots.net/count/count.php"
-        title="アクセスカウンター"
-        height="40"
-        width="220"
-      ></iframe>
+    <div class="home-page__counter" aria-label="アクセスカウンター">
+      total<span class="counter-frame">
+        <img class="counter-image" src="gounter/count.php" alt="累計アクセス数">
+      </span>
+      today<span class="counter-frame">
+        <img class="counter-image" src="gounter/today.php" alt="今日のアクセス数">
+      </span>
+      yesterday<span class="counter-frame">
+        <img class="counter-image" src="gounter/yesterday.php" alt="昨日のアクセス数">
+      </span>
+      number<span class="counter-frame">
+        <img class="counter-image" src="gounter/number.php/000123" alt="指定した数字">
+      </span>
     </div>
     <BlogPostList posts={posts} />
   </div>
