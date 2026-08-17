@@ -1,0 +1,2 @@
+# Deny every HTTP request to the database directory on Apache 2.4.
+Require all denied

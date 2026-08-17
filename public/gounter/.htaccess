@@ -1,0 +1,4 @@
+# SQLite database files must never be served directly.
+<FilesMatch "(?i:\.(?:db|sqlite|sqlite3)(?:-(?:journal|wal|shm))?)$">
+  Require all denied
+</FilesMatch>
